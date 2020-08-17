@@ -1,0 +1,70 @@
+# Change workspace (Datei->Verziechnes wechseln) to directory containing files
+
+# install the gdata and pheatmap packages Pakete->InstallierePaket(e) (only necessary the first time)
+# choose a mirror location (somewhere in your country)
+# install gdata and pheatmap packages (and colorspace)
+# > install.packages('gdata')
+# > install.packages('pheatmap')
+# > install.packages('colorspace')
+
+# load gdata and pheatmap package
+> library(gdata)  
+> library(pheatmap) 
+> library(RColorBrewer)                 
+
+# read csv file (created with semicolon ";" as the separator and the first column as gene names) -> to check how your .csv file was saved, use the code below for a print screen
+> mydata = read.csv(file="OLINK_BOS_manuscript_heatmap.csv", header = TRUE, sep=",")
+
+# display csv file imported into R
+> mydata
+
+# convert first row to rownames
+> rownames = mydata[,1]
+
+
+# create data matrix containing numerical values only 
+> matdata <- data.matrix(mydata[,2:ncol(mydata)])
+
+# append row names to data matrix
+> rownames(matdata) <- rownames
+
+# Draw heatmaps - set parameters 
+> mypalette <- colorRampPalette(c("purple", "gray", "yellow"))(100)
+> mybreak <- seq(-3, 3, length.out = 101)
+> pheatmap(matdata, cluster_row = TRUE, cluster_cols = TRUE, clustering_distance_columns = "euclidean", breaks= mybreak , color= mypalette, cellwidth = 6, cellheight = 0.05, fontsize = 8, show_colnames = TRUE, show_rownames = FALSE, filename = "BOS_heatmap_15_percent.tiff" )
+
+
+# Draw heatmaps - columns stay fixed
+> pheatmap(matdata, cluster_row = TRUE, cluster_cols = FALSE, clustering_distance_columns = "correlation", cellwidth = 10, cellheight = 10, fontsize = 8, show_colnames = TRUE, show_rownames = TRUE, filename = "demo.pdf" )
+
+# annotation_col = data.frame(CellType = factor(1:p %% 2 == 0, labels = c("Class1", "Class2")))
+
+# annotation = data.frame(CellType = factor(1:p %% 2 == 0, labels = c("Class1", "Class2")))
+
+# annotation_col= annotation_col,
+
+# Change color scale
+# install RColorBrewer package (required only the first time) - same procedure as above 
+
+>library(pheatmap)
+>library(RColorBrewer)
+
+# Imports the sample expression data
+> mydata
+> mydata = exprs(ALL)
+
+# Sets the minimum (0), the maximum (15), and the increasing steps (+1) for the color scale
+# Note: if some of your genes are outside of this range, they will appear white on the heatmap
+> breaksList = seq(20, 36, by = 1)
+
+# Plots the first heatmap
+> pheatmap(expressionData[1:10, ], # Plots the first 10 genes of the dataset
+         color = colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(length(breaksList)), # Defines the vector of colors for the legend (it has to be of the same lenght of breaksList)
+         breaks = breaksList) # Sets the breaks of the color scale as in breaksList
+
+pheatmap(matdata, color = colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(length(breaksList)), breaks = breaksList, cluster_row = TRUE, cluster_cols = FALSE, clustering_distance_columns = "correlation", cellwidth = 10, cellheight = 10, fontsize = 8, show_colnames = TRUE, show_rownames = TRUE, filename = "enzymes_markers7.pdf") 
+
+# Plots the second heatmap with the same color and breaks options
+> pheatmap(expressionData[20:30, ], # Plots the third 10 genes of the dataset
+         color = colorRampPalette(rev(brewer.pal(n = 7, name = "RdYlBu")))(length(breaksList)),
+         breaks = breaksList)

@@ -1,0 +1,6 @@
+"0","#remove duplicate ENSG ids
+hPCLS_rc_ENSG %>% distinct(ENSG_id, .keep_all = T) -> hPCLS_rc_ENSG
+"
+"2","Error: `distinct()` must use existing variables.
+[31mx[39m `ENSG_id` not found in `.data`.
+"
