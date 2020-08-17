@@ -1,0 +1,15 @@
+"0","knitr::opts_chunk$set(echo=TRUE,message=FALSE, warning=FALSE)"
+"2","Warning messages:
+"
+"2","1: "
+"2","In readLines(con, warn = FALSE) :"
+"2","
+ "
+"2"," invalid input found on input connection 'Bisque_analysis_workflow.knit.md'
+"
+"2","2: "
+"2","In readLines(con, warn = FALSE) :"
+"2","
+ "
+"2"," cannot open file 'Bisque_analysis_workflow.utf8.md': No such file or directory
+"
