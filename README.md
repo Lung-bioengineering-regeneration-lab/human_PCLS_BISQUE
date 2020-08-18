@@ -3,11 +3,16 @@ Deconvolution of PCLS bulk RNASeq using IPF Atlas scRNAseq using Bisque
 
 ### Overview of Bisque Analysis:
 
-XXXXXXXXX
+Bisque is a tool designed to deconvulate bulk RNAseq data into cell
+proportions based on available single cell RNAseq (1). For reference
+based decomposition, BisqueRNA need an input of the bulkRNA seq read
+counts and the scRNASeq read counts in the form of ExpressionSet.
 
-For reference based decomposition, BisqueRNA need an input of the
-bulkRNA seq read counts and the scRNASeq read counts in the form of
-ExpressionSet.
+> 1.Jew, Brandon, et al. “Accurate estimation of cell composition in
+> bulk expression through robust integration of single-cell
+> information.” Nature Communications 11.1 (2020): 1-11.
+
+BisqueRNA package:
 
 <https://cran.r-project.org/web/packages/bisque/index.html>
 
@@ -497,7 +502,7 @@ res <- BisqueRNA::ReferenceBasedDecomposition(bulk.eset = hPCLS
 ref.based.estimates <- res$bulk.props
 
 
-saveRDS(res, paste("results_",gsub(":","-",gsub(" ","_",date())),".rds"))
+saveRDS(res, paste("data/Bisque/results_PCLS_16composite_subjects_",gsub(":","-",gsub(" ","_",date())),".rds"))
 saveRDS(all_celltypes.short, paste("Cells_used_",gsub(":","-",gsub(" ","_",date())),".rds"))
 ```
 
@@ -509,7 +514,7 @@ sample will equal one. Thus, graphs will be generated as percentage of
 cells.
 
 ``` r
-results <- readRDS("data/Bisque/results_ Sat_Aug_15_13-13-03_2020_noID.rds")
+results <- readRDS("data/Bisque/results_PCLS_16composite_subjects_Tue_Aug_18_12-01-33_2020_noID.rds")
 ```
 
 Graphing the cell percentages: One graph contains all. PS. Multiplets

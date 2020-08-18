@@ -11,16 +11,16 @@
     "relative_order": 1,
     "properties": {
         "chunk_output_type": "inline",
-        "cursorPosition": "240,0",
-        "scrollLine": "229",
+        "cursorPosition": "27,32",
+        "scrollLine": "25",
         "ignored_words": "dataset\n"
     },
     "folds": "",
-    "lastKnownWriteTime": 1597757658,
+    "lastKnownWriteTime": 1597758768,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1597757658238,
+    "last_content_update": 1597758768693,
     "read_only": false,
     "read_only_alternatives": []
 }
