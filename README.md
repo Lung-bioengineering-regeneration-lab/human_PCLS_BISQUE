@@ -235,6 +235,7 @@ number of patients to be a major limiting factor computationally.
 ### Part 2b. Sample Size reduction of the single cell RNAseq dataset:
 
 ``` r
+set.seed(317)
 # get a list of control subjects (28 total)
 Control_subjects <- data.frame("original_subject_id"= unique(all_celltypes[all_celltypes$Disease_Identity == "Control", ]$Subject_Identity))
 
@@ -308,10 +309,10 @@ total of 48 real subject data.
 
 ``` r
 #selecting 5 normal subjects and 5 IPF subjects randomly
-normalsubjects_new <- unique(all_celltypes_new[all_celltypes_new$Disease_Identity=="Control",]$new_label)
+normalsubjects_new <- unique(all_celltypes_new[all_celltypes_new$Disease_Identity=="Control",]$new_subject_id)
 normalsubjects_8random_new <- normalsubjects_new[sample(1:length(normalsubjects_new),8)]
 
-IPFsubjects_new <- unique(all_celltypes_new[all_celltypes_new$Disease_Identity=="IPF",]$new_label)
+IPFsubjects_new <- unique(all_celltypes_new[all_celltypes_new$Disease_Identity=="IPF",]$new_subject_id)
 IPFsubjects_8random_new <- IPFsubjects_new[sample(1:length(IPFsubjects_new),8)]
 
 #combine all selected and store them in csv. NOTE: these will be different if the code is run again since they are sampled randomly, therefore the csv is saved with the date and id of the time they are selected
@@ -329,7 +330,7 @@ to as all\_celltypes.short
 ``` r
 all_celltypes_new <- readRDS("data/IPF_cell_atlas/all_celltypes_new.rds")
 selected_subjects <- readRDS("data/IPF_cell_atlas/selected_subjects_16random.rds")
-all_celltypes.short <- all_celltypes_new[all_celltypes_new$new_label %in% selected_subjects,]
+all_celltypes.short <- all_celltypes_new[all_celltypes_new$new_subject_id %in% selected_subjects,]
 ```
 
 Additionally, the dataset has an unrealistic proportion of macrophages
@@ -410,7 +411,7 @@ sample.ids.short <- all_celltypes.short$CellBarcode_Identity
 #cell types noted
 cell.type.labels.short <- all_celltypes.short$Manuscript_Identity
 #subject information: here we use the newly formed subjects.
-individual.labels.short <- all_celltypes.short$new_label
+individual.labels.short <- all_celltypes.short$new_subject_id
 
 # individual.ids and cell.types should be in the same order as in sample.ids
 sc.pheno <- data.frame(check.names=F, check.rows=F,

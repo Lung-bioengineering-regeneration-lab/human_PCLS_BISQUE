@@ -1,2 +1,0 @@
-"0","results <- readRDS(""data/Bisque/results_ Sat_Aug_15_13-13-03_2020_noID.rds"")"
-"0","as.data.frame(results$bulk.props)"

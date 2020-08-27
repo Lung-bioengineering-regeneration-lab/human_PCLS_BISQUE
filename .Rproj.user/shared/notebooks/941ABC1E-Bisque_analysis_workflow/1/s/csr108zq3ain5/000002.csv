@@ -1,6 +1,0 @@
-"0","#gene annotation was done with BioMart and stored in csv as G_list.
-read.csv(""/home/ha8343al/bisque/G_list.csv"") -> G_list
-"
-"2","cannot open file '/home/ha8343al/bisque/G_list.csv': No such file or directory"
-"2","Error in file(file, ""rt"") : cannot open the connection
-"
