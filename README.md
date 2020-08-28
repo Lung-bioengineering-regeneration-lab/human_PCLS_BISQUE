@@ -67,6 +67,56 @@ to create the ExpressionSet (3).
 
 Load all required packages:
 
+``` r
+required.packages <- c("tidyverse", "biomaRt", "Biobase", "Matrix", "BisqueRNA", "ggplot2", "sva")
+lapply(required.packages, library, character.only = TRUE)
+```
+
+    ## [[1]]
+    ##  [1] "forcats"   "stringr"   "dplyr"     "purrr"     "readr"     "tidyr"    
+    ##  [7] "tibble"    "ggplot2"   "tidyverse" "stats"     "graphics"  "grDevices"
+    ## [13] "utils"     "datasets"  "methods"   "base"     
+    ## 
+    ## [[2]]
+    ##  [1] "biomaRt"   "forcats"   "stringr"   "dplyr"     "purrr"     "readr"    
+    ##  [7] "tidyr"     "tibble"    "ggplot2"   "tidyverse" "stats"     "graphics" 
+    ## [13] "grDevices" "utils"     "datasets"  "methods"   "base"     
+    ## 
+    ## [[3]]
+    ##  [1] "Biobase"      "BiocGenerics" "parallel"     "biomaRt"      "forcats"     
+    ##  [6] "stringr"      "dplyr"        "purrr"        "readr"        "tidyr"       
+    ## [11] "tibble"       "ggplot2"      "tidyverse"    "stats"        "graphics"    
+    ## [16] "grDevices"    "utils"        "datasets"     "methods"      "base"        
+    ## 
+    ## [[4]]
+    ##  [1] "Matrix"       "Biobase"      "BiocGenerics" "parallel"     "biomaRt"     
+    ##  [6] "forcats"      "stringr"      "dplyr"        "purrr"        "readr"       
+    ## [11] "tidyr"        "tibble"       "ggplot2"      "tidyverse"    "stats"       
+    ## [16] "graphics"     "grDevices"    "utils"        "datasets"     "methods"     
+    ## [21] "base"        
+    ## 
+    ## [[5]]
+    ##  [1] "BisqueRNA"    "Matrix"       "Biobase"      "BiocGenerics" "parallel"    
+    ##  [6] "biomaRt"      "forcats"      "stringr"      "dplyr"        "purrr"       
+    ## [11] "readr"        "tidyr"        "tibble"       "ggplot2"      "tidyverse"   
+    ## [16] "stats"        "graphics"     "grDevices"    "utils"        "datasets"    
+    ## [21] "methods"      "base"        
+    ## 
+    ## [[6]]
+    ##  [1] "BisqueRNA"    "Matrix"       "Biobase"      "BiocGenerics" "parallel"    
+    ##  [6] "biomaRt"      "forcats"      "stringr"      "dplyr"        "purrr"       
+    ## [11] "readr"        "tidyr"        "tibble"       "ggplot2"      "tidyverse"   
+    ## [16] "stats"        "graphics"     "grDevices"    "utils"        "datasets"    
+    ## [21] "methods"      "base"        
+    ## 
+    ## [[7]]
+    ##  [1] "sva"          "BiocParallel" "genefilter"   "mgcv"         "nlme"        
+    ##  [6] "BisqueRNA"    "Matrix"       "Biobase"      "BiocGenerics" "parallel"    
+    ## [11] "biomaRt"      "forcats"      "stringr"      "dplyr"        "purrr"       
+    ## [16] "readr"        "tidyr"        "tibble"       "ggplot2"      "tidyverse"   
+    ## [21] "stats"        "graphics"     "grDevices"    "utils"        "datasets"    
+    ## [26] "methods"      "base"
+
 Load the bulk RNAseq DataSet
 
 ``` r
@@ -229,27 +279,31 @@ single cell data from all patients; we therefore addressed the issue
 using downsizing of the samples in addition to combining single cells
 from several subjects into computationally derived composite subjects in
 a randomized fashion. This approach allows us to sustain the
-heterogeniety of the dataset and include more cells as we found the
+heterogeneity of the dataset and include more cells as we found the
 number of patients to be a major limiting factor computationally.
 
 ### Part 2b. Sample Size reduction of the single cell RNAseq dataset:
 
 ``` r
 set.seed(317)
+
 # get a list of control subjects (28 total)
 Control_subjects <- data.frame("original_subject_id"= unique(all_celltypes[all_celltypes$Disease_Identity == "Control", ]$Subject_Identity))
 
-# add a randomized order so 28 patients are places into 9 groups of equal size
+# add a randomized order so 28 patients are places into 10 groups (8 of these groups will contain 3 subjects each, and two will contain 2 subjects)
 Control_subjects$order <- sample(seq(1:100),nrow(Control_subjects),replace=F)
 
-#order the new subjects and split into 3 columns. combine all columns into a new one.
+#order the new subjects 
 Control_subjects <- Control_subjects[order(Control_subjects$order),]
 
-list1<- Control_subjects$original_subject_id[1:9]
-list2<- Control_subjects$original_subject_id[10:18]
-list3<- Control_subjects$original_subject_id[19:27]
+# and split into 3 columns. combine all columns into a new one list containing all 9 groups.
+list1<- Control_subjects$original_subject_id[1:10]
+list2<- Control_subjects$original_subject_id[11:20]
+list3<- Control_subjects$original_subject_id[21:28]
  
-new_controls <- paste0(list1, rep("-",9), list2, rep("-",9), list3)
+# list 3 is written c(list3,"","") in order to match the number of items in other lists. If not done, two subjects from list 3 will be repeated
+new_controls <- paste0(list1, rep("-",9), list2, c(rep("-",8), rep("",2)), c(list3,rep("",2)))
+
 
 #reference each new combination to the dataframe
 Control_subjects$new_subject_id <- NA
@@ -264,7 +318,7 @@ Control_subjects$order <- NULL
 #lets do the same for IPF subjects (32 total)
 IPF_subjects <- data.frame("original_subject_id"= unique(all_celltypes[all_celltypes$Disease_Identity == "IPF", ]$Subject_Identity))
 
-# add a randomized order so 32 patients are places into 11 groups of equal size
+# add a randomized order so 32 patients are places into 11 groups (10 groups of 3subjects, one group with 2 subjects)
 IPF_subjects$order <- sample(seq(1:100),nrow(IPF_subjects),replace=F)
 
 #order the new subjects and split into 3 columns. combine all columns into a new one.
@@ -272,9 +326,9 @@ IPF_subjects <- IPF_subjects[order(IPF_subjects$order),]
 
 list1IPF<- IPF_subjects$original_subject_id[1:11]
 list2IPF<- IPF_subjects$original_subject_id[12:22]
-list3IPF<- c(IPF_subjects$original_subject_id[23:32],"")
+list3IPF<- IPF_subjects$original_subject_id[23:32]
  
-new_IPF <- paste0(list1IPF, rep("-",11), list2IPF, rep("-",11), list3IPF)
+new_IPF <- paste0(list1IPF, rep("-",11), list2IPF, c(rep("-",10),""), c(list3IPF,""))
 
 #reference each new combination to the dataframe
 IPF_subjects$new_subject_id <- NA
@@ -308,7 +362,8 @@ control composite subjects and 8 IPF composite subjects, resulting in a
 total of 48 real subject data.
 
 ``` r
-#selecting 5 normal subjects and 5 IPF subjects randomly
+setseed(707)
+#selecting 8 composite normal subjects and 8 composite IPF subjects randomly
 normalsubjects_new <- unique(all_celltypes_new[all_celltypes_new$Disease_Identity=="Control",]$new_subject_id)
 normalsubjects_8random_new <- normalsubjects_new[sample(1:length(normalsubjects_new),8)]
 
@@ -348,8 +403,10 @@ randomly across samples (5).
 >     Journal 55.1 (2020).
 
 ``` r
+set.seed(206)
+
 ###Code added to randomly select and keep half all macrophages
-#count macrophages
+#count macrophages. In Joshi et. al (2020) macrophages represented 3.5% of the dataset, thus we will reduce the reference dataset macrophages to match that.
 macrophage_amount <- round(nrow(all_celltypes.short)*0.035)
 macrophages_ids <- all_celltypes.short[all_celltypes.short$Manuscript_Identity=="Macrophage",]$CellBarcode_Identity
 macrophages_to_remove <- macrophages_ids[sample(1:length(macrophages_ids),length(macrophages_ids)-macrophage_amount)]
@@ -359,7 +416,8 @@ saveRDS(macrophages_to_remove, paste("macrophages_to_remove_",gsub(":","-",gsub(
 #remove.macrophages from list
 all_celltypes.short <- all_celltypes.short[!(all_celltypes.short$CellBarcode_Identity %in% macrophages_to_remove),]
 
-#count Alveolar macrophages
+#count Alveolar macrophages. In Joshi et. alveolar macrophages represented 1.6% of the dataset, thus we will reduce the reference dataset alveolar macrophages to match that.
+
 alv_macrophage_amount <- round(nrow(all_celltypes.short)*0.016)
 alv_macrophages_ids <- all_celltypes.short[all_celltypes.short$Manuscript_Identity=="Macrophage_Alveolar",]$CellBarcode_Identity
 alv_macrophages_to_remove <- alv_macrophages_ids[sample(1:length(alv_macrophages_ids),length(alv_macrophages_ids)-alv_macrophage_amount)]

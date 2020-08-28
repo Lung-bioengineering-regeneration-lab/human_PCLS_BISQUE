@@ -1,0 +1,26 @@
+{
+    "id": "D55935A6",
+    "path": "C:/Users/ha8343al/LBR-HNA/R/human_PCLS_BISQUE/README.Rmd",
+    "project_path": "README.Rmd",
+    "type": "r_markdown",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1597675518763.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "chunk_output_type": "inline",
+        "cursorPosition": "61,3",
+        "scrollLine": "41",
+        "ignored_words": "dataset\n"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1598618836,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1598618836224,
+    "read_only": false,
+    "read_only_alternatives": []
+}
