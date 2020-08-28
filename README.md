@@ -3,8 +3,8 @@ Deconvolution of PCLS bulk RNASeq using IPF Atlas scRNAseq using Bisque
 
 ### Overview of Bisque Analysis:
 
-Bisque is a tool designed to deconvulate bulk RNAseq data into cell
-proportions based on available single cell RNAseq (1). For reference
+Bisque is a tool designed to deconvolute bulk RNAseq data into cell
+proportions based on available single cell RNAseq data(1). For reference
 based decomposition, BisqueRNA need an input of the bulkRNA seq read
 counts and the scRNASeq read counts in the form of ExpressionSet.
 
@@ -308,7 +308,7 @@ control composite subjects and 8 IPF composite subjects, resulting in a
 total of 48 real subject data.
 
 ``` r
-#selecting 5 normal subjects and 5 IPF subjects randomly
+#selecting 8 normal subjects and 8 IPF subjects randomly
 normalsubjects_new <- unique(all_celltypes_new[all_celltypes_new$Disease_Identity=="Control",]$new_subject_id)
 normalsubjects_8random_new <- normalsubjects_new[sample(1:length(normalsubjects_new),8)]
 
@@ -336,8 +336,8 @@ all_celltypes.short <- all_celltypes_new[all_celltypes_new$new_subject_id %in% s
 Additionally, the dataset has an unrealistic proportion of macrophages
 in the dataset making up more than 50 percent of the dataset.The
 proportion of celltypes in the reference dataset highly influences the
-output of bisque reference based decomposition. Thus, we have reduced
-the number of macrophages on the dataset based on percentages published
+output of Bisque reference based decomposition. Thus, we have reduced
+the number of macrophages in the dataset based on percentages published
 in a mouse single cell dataset where the proportions of celltypes are
 more accurate. The selection of macrophages in this analysis was done
 randomly across samples (5).
@@ -401,7 +401,7 @@ The data matrix is stored as a Sparse Matrix. ExpressionSet can only
 process a dense matrix. We perform all filtration steps on the sparse
 matrix first, then convert it to a dense matrix. Luckily, all filtration
 steps have been applied to the meta\_data; we now only need to select
-the cells from the single cell count matrix. PS. this part was performed
+the cells from the single cell count matrix. Please note this part was performed
 on the computing cluster.
 
 ``` r
@@ -460,7 +460,8 @@ published single-cell reference paper(4). Bisque reference based
 analysis requires a character vector of all genes used in identification
 of cell clusters. Markers were obtained from DE of celltypes published
 with additional filtration based on logFC \> 0.25, expressed in 25% of
-the cells with FDR \< 0.05.
+the cells with FDR \< 0.05. In addition, the publisehd marker files need to be
+converted to ESNG for use with the bulk and single-cell RNAseq datasets. 
 
 ``` r
 #load modified markers file
@@ -518,7 +519,7 @@ cells.
 results <- readRDS("data/Bisque/results_PCLS_16composite_subjects_Tue_Aug_18_12-01-33_2020_noID.rds")
 ```
 
-Graphing the cell percentages: One graph contains all. PS. Multiplets
+Graphing the cell percentages: One graph contains all. Multiplets
 will be removed from the graphs as they are not specific for a known
 cell type.
 
@@ -579,12 +580,12 @@ geom_jitter(stat="identity", width = 0.25) +
 # Deconvolution of Publicly available bulk RNAseq in combination with hPCLS data.
 
 While it is expected for PCLS to lose a few cell types due to the
-slicing process, bisque allowed us to detect which cell types may be
+slicing process, Bisque allowed us to detect which cell types may be
 present in the PCLS. In order to confirm the results we see in the
 deconvoluted PCLS, we ought to validate it by running it alongside other
 bulk RNAseq data of lung tissue.
 
-The two Patients we have used to Obtain PCLS for this study have normal
+The two Patients we have used to obtain PCLS for this study have normal
 and fibrotic charecteristics. Therefore, we have selected a recent study
 by Luzina et. al (2018)(6) that compared the transcriptomic profile of
 normal lung tissue compared with heavily scarred and normal looking
